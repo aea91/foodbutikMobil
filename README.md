@@ -66,17 +66,7 @@ mycontacts/
 │ ├── dashboard/ # Main dashboard feature
 │ ├── welcome/ # Welcome/onboarding feature
 │ └── profile/ # User profile feature
-## Tech Stack
 
-- **State Management**: Flutter Bloc
-- **Dependency Injection**: GetIt
-- **Navigation**: Go Router
-- **Network**: Dio
-- **Local Storage**: Hive, Shared Preferences
-- **Backend Integration**: Firebase
-- **Architecture**: Clean Architecture with Feature-first Modular Approach
-
-## Getting Started
 
 ### Prerequisites
 
