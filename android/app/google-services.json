@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "585151791832",
+    "project_id": "foodbutiktask",
+    "storage_bucket": "foodbutiktask.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585151791832:android:4245b031fc6e0e8c83cdad",
+        "android_client_info": {
+          "package_name": "com.foodbutik.mycontacts"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv5uUXFqPNoJnmLD1xoBmoHzrqNYH9f80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
