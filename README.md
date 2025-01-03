@@ -35,7 +35,7 @@ mycontacts/
 - **Navigation**: Go Router
 - **Network**: Dio
 - **Local Storage**: Hive, Shared Preferences
-- **Backend Integration**: Firebase
+- **Backend Integration**: Firebase - RestApi
 - **Architecture**: Clean Architecture with Feature-first Modular Approach
 
 ## Getting Started
@@ -45,28 +45,6 @@ mycontacts/
 - Flutter SDK (^3.6.0)
 - Dart SDK (^3.5.4)
 - Firebase project setup
-
-### Installation
-
-1. Clone the repository:
-
-
-⌘K to generate a command
-@Codebase Readme.md dosyasına proje ile ilgil bilgileri yaz.
-
-Projenin ana README.md dosyasını güncelleyerek daha kapsamlı bir dokümantasyon oluşturalım:
-mycontacts/
-├── module/
-│ ├── core/ # Core functionality, shared utilities
-│ ├── packages/ # Shared packages
-│ └── uikit/ # Reusable UI components
-│
-├── feature/
-│ ├── auth/ # Authentication feature
-│ ├── dashboard/ # Main dashboard feature
-│ ├── welcome/ # Welcome/onboarding feature
-│ └── profile/ # User profile feature
-
 
 ### Prerequisites
 
@@ -123,10 +101,6 @@ Each feature is a self-contained module with its own:
 
 ### API Configuration
 
-dart
-// Base URLs
-const String DEV_BASE_URL = "https://api.dev.mycontacts.com/v1";
-const String PROD_BASE_URL = "https://api.mycontacts.com/v1";
 // API Endpoints
 const String LOGIN_PATH = "/auth/login";
 const String REGISTER_PATH = "/auth/register";
@@ -137,103 +111,6 @@ const String PROFILE_PATH = "/user/profile";
 ### State Management
 
 The application uses BLoC pattern with Cubit for state management:
-
-dart
-// Example Dashboard State
-abstract class DashboardState extends Equatable {
-const DashboardState();
-}
-class DashboardInitial extends DashboardState {
-@override
-List<Object> get props => [];
-}
-class DashboardLoading extends DashboardState {
-@override
-List<Object> get props => [];
-}
-class DashboardLoaded extends DashboardState {
-final List<Contact> contacts;
-const DashboardLoaded(this.contacts);
-@override
-List<Object> get props => [contacts];
-}
-
-### Data Models
-
-dart
-// Contact Model
-class Contact {
-final String id;
-final String name;
-final String phone;
-final String? email;
-final String? avatar;
-Contact({
-required this.id,
-required this.name,
-required this.phone,
-this.email,
-this.avatar,
-});
-factory Contact.fromJson(Map<String, dynamic> json) => Contact(
-id: json['id'],
-name: json['name'],
-phone: json['phone'],
-email: json['email'],
-avatar: json['avatar'],
-);
-}
-// User Model
-class User {
-final String id;
-final String email;
-final String name;
-final String? profilePicture;
-User({
-required this.id,
-required this.email,
-required this.name,
-this.profilePicture,
-});
-}
-
-dart
-class NetworkManager {
-late final Dio dio;
-NetworkManager() {
-dio = Dio(BaseOptions(
-baseUrl: DEV_BASE_URL,
-connectTimeout: const Duration(seconds: 30),
-receiveTimeout: const Duration(seconds: 30),
-));
-dio.interceptors.add(LogInterceptor());
-dio.interceptors.add(AuthInterceptor());
-}
-}
-
-dart
-// Base Text Field
-class BaseTextField extends StatelessWidget {
-final String hint;
-final TextEditingController controller;
-final bool isPassword;
-const BaseTextField({
-required this.hint,
-required this.controller,
-this.isPassword = false,
-});
-}
-// Base Button
-class BaseButton extends StatelessWidget {
-final String text;
-final VoidCallback onPressed;
-final bool isLoading;
-const BaseButton({
-required this.text,
-required this.onPressed,
-this.isLoading = false,
-});
-}
 
 ## Features
 
@@ -284,6 +161,6 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Your Name - [@yourusername](https://twitter.com/yourusername)
+@aea91
 
 Project Link: [https://github.com/yourusername/mycontacts](https://github.com/yourusername/mycontacts)
