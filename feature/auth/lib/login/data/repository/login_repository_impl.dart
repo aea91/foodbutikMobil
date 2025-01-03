@@ -54,4 +54,15 @@ class LoginRepositoryImpl extends LoginRepository {
       return Left(e);
     }
   }
+
+  @override
+  ResultFuture<void> sendNotification(
+      {required int userId, required String title, required String body}) async {
+    try {
+      await datasource.sendNotification(userId: userId, title: title, body: body);
+      return Right(null);
+    } on NetworkException catch (e) {
+      return Left(e);
+    }
+  }
 }

@@ -6,13 +6,15 @@ part of 'register_response_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-RegisterResponseModel _$RegisterResponseModelFromJson(Map<String, dynamic> json) =>
+RegisterResponseModel _$RegisterResponseModelFromJson(
+        Map<String, dynamic> json) =>
     RegisterResponseModel(
-      userId: json['userId'] as int,
+      userId: (json['userId'] as num).toInt(),
       token: json['token'] as String,
     );
 
-Map<String, dynamic> _$RegisterResponseModelToJson(RegisterResponseModel instance) =>
+Map<String, dynamic> _$RegisterResponseModelToJson(
+        RegisterResponseModel instance) =>
     <String, dynamic>{
       'userId': instance.userId,
       'token': instance.token,

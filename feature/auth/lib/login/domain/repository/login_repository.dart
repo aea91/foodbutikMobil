@@ -23,4 +23,10 @@ abstract class LoginRepository {
     required int userId,
     required String platform,
   });
+
+  ResultFuture<void> sendNotification({
+    required int userId,
+    required String title,
+    required String body,
+  });
 }

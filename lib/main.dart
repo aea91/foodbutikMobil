@@ -25,7 +25,6 @@ void main() async {
     getItDashboardInit(),
   ]);
 
-  // FCM'i en son başlatalım
   await _initializeFCM();
 
   runApp(const MyApp());
@@ -35,11 +34,9 @@ Future<void> _initializeFCM() async {
   try {
     final messaging = FirebaseMessaging.instance;
 
-    await Future.delayed(const Duration(seconds: 1)); // Kısa bir bekleme ekleyelim
+    await Future.delayed(const Duration(seconds: 1));
 
-    // Token'ı al
     final token = await messaging.getToken();
-    print('FCM Token: $token');
 
     // İzinleri iste
     await messaging.requestPermission(
@@ -48,10 +45,23 @@ Future<void> _initializeFCM() async {
       sound: true,
     );
 
-    // Mesaj dinleyicilerini ayarla
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+      if (message.notification != null) {
+        // Show local notification
+        showDialog(
+          context: router.routerDelegate.navigatorKey.currentContext!,
+          builder: (context) => AlertDialog(
+            title: Text(message.notification!.title ?? 'New Message'),
+            content: Text(message.notification!.body ?? ''),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     });
   } catch (e) {
     print('FCM initialization error: $e');

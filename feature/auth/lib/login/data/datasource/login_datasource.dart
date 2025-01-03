@@ -24,4 +24,10 @@ abstract class LoginDatasource {
     required int userId,
     required String platform,
   });
+
+  Future<void> sendNotification({
+    required int userId,
+    required String title,
+    required String body,
+  });
 }

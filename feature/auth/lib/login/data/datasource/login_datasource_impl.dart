@@ -3,6 +3,7 @@ import 'package:auth/login/data/model/fcm_token_dto_model.dart';
 import 'package:auth/login/data/model/forgot_password_dto_model.dart';
 import 'package:auth/login/data/model/login_dto_model.dart';
 import 'package:auth/login/data/model/login_response_model.dart';
+import 'package:auth/login/domain/usecase/notification_send.dart';
 import 'package:auth/utils/network_constants.dart';
 import 'package:core/base/model/network_error.dart';
 import 'package:core/global/global_helper.dart';
@@ -59,6 +60,21 @@ class LoginDatasourceImpl extends LoginDatasource {
       path: NetworkConstants.registerFcmTokenPath,
       model: FcmTokenDtoModel(token: token, userId: userId, platform: platform),
       fromJson: FcmTokenDtoModel.fromJson,
+      token: GlobalHelper.getToken(),
+    );
+    if (response is NetworkException) {
+      throw response;
+    }
+    return response;
+  }
+
+  @override
+  Future<void> sendNotification(
+      {required int userId, required String title, required String body}) async {
+    final response = await manager.dioPost(
+      path: NetworkConstants.sendNotificationPath,
+      model: NotificationSendParams(userId, title, body),
+      fromJson: null,
       token: GlobalHelper.getToken(),
     );
     if (response is NetworkException) {

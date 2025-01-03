@@ -22,7 +22,7 @@ class _LoginTextButton extends StatelessWidget {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                // Login tap action
+                GoManager.instance.replace(path: NavigationConstants.login);
               },
           ),
         ],
@@ -39,7 +39,7 @@ class _RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => false,
+      onPressed: () => context.read<RegisterCubit>().register(),
       child: Text("Register"),
     );
   }

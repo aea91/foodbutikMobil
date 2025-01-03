@@ -17,6 +17,9 @@ dependencies:
   uikit:
     path: ../../module/uikit
 
+  dashboard:
+    path: ../../feature/dashboard
+
   equatable: ^2.0.7
   flutter_bloc: ^8.1.6
   json_serializable: ^6.3.1

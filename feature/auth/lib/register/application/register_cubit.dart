@@ -1,7 +1,9 @@
 import 'package:auth/register/application/register_state.dart';
 import 'package:auth/register/application/register_status.dart';
 import 'package:auth/register/domain/usecase/user_register.dart';
+import 'package:auth/utils/navigation_constants.dart';
 import 'package:core/exception/app_exception.dart';
+import 'package:core/navigation/go_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +25,12 @@ class RegisterCubit extends Cubit<RegisterState> {
         emit(state.copyWith(status: RegisterStatus.error, exception: error));
         reset();
       }, (result) {
-        emit(state.copyWith(status: RegisterStatus.completed));
+        emit(state.copyWith(
+          status: RegisterStatus.completed,
+          exception:
+              AppException(message: "Congratulations, your account has been created successfully."),
+        ));
+        GoManager.instance.replace(path: NavigationConstants.login);
       });
     }
   }

@@ -1,9 +1,11 @@
 import 'package:auth/register/application/register_cubit.dart';
 import 'package:auth/register/application/register_state.dart';
 import 'package:auth/utils/injection_contatiner.dart';
+import 'package:auth/utils/navigation_constants.dart';
 import 'package:core/base/view/base_view.dart';
 import 'package:core/extensions/context_extensions.dart';
 import 'package:core/extensions/string_extensions.dart';
+import 'package:core/navigation/go_manager.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

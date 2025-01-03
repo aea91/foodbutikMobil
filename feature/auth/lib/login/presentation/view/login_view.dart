@@ -59,6 +59,7 @@ class LoginView extends StatelessWidget {
                           : _LoginButton(),
                       SizedBox(height: 20),
                       _RegisterTextButton(),
+                      SizedBox(height: 20),
                       SignInButton(Buttons.google,
                           onPressed: () => context.read<LoginCubit>().signInWithGoogle())
                     ],

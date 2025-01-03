@@ -5,4 +5,5 @@ class NetworkConstants {
   static const String resetPasswordPath = '/api/auth/reset-password';
   static const String facebookLoginPath = '/api/auth/facebook';
   static const String registerFcmTokenPath = '/api/notifications/register-token';
+  static const String sendNotificationPath = '/api/notifications/send';
 }

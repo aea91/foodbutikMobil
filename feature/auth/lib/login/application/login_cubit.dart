@@ -1,13 +1,17 @@
 import 'dart:io';
 import 'package:auth/login/application/login_state.dart';
 import 'package:auth/login/application/login_status.dart';
+import 'package:auth/login/domain/entity/login_response_entity.dart';
 import 'package:auth/login/domain/usecase/forgot_password_usecase.dart';
+import 'package:auth/login/domain/usecase/notification_send.dart';
 import 'package:auth/login/domain/usecase/register_fcm_token_usecase.dart';
 import 'package:auth/login/domain/usecase/user_login.dart';
 import 'package:auth/register/domain/usecase/user_register.dart';
+import 'package:auth/utils/navigation_constants.dart';
 import 'package:core/cache/constants/cache_keys.dart';
 import 'package:core/cache/shared/shared_manager.dart';
 import 'package:core/exception/app_exception.dart';
+import 'package:core/navigation/go_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -20,16 +24,19 @@ class LoginCubit extends Cubit<LoginState> {
     required ForgotPasswordUsecase forgotPasswordUsecase,
     required RegisterFcmTokenUsecase registerFcmTokenUsecase,
     required UserRegisterUsecase registerUserUsecase,
+    required NotificationSendUsecase notificationSendUsecase,
   })  : _userLoginUseCase = userLoginUseCase,
         _forgotPasswordUsecase = forgotPasswordUsecase,
         _registerFcmTokenUsecase = registerFcmTokenUsecase,
         _registerUserUsecase = registerUserUsecase,
+        _notificationSendUsecase = notificationSendUsecase,
         super(LoginState.initial());
 
   final UserLoginUsecase _userLoginUseCase;
   final ForgotPasswordUsecase _forgotPasswordUsecase;
   final RegisterFcmTokenUsecase _registerFcmTokenUsecase;
   final UserRegisterUsecase _registerUserUsecase;
+  final NotificationSendUsecase _notificationSendUsecase;
   final formKey = GlobalKey<FormState>();
 
   Future<void> login() async {
@@ -47,13 +54,7 @@ class LoginCubit extends Cubit<LoginState> {
           emit(state.copyWith(status: LoginStatus.error, exception: error));
         },
         (response) async {
-          print("success response: $response");
-
-          emit(state.copyWith(
-            status: LoginStatus.completed,
-            loginResponse: response,
-          ));
-          await registerFcmToken();
+          await handleSuccessLogin(response: response);
         },
       );
     }
@@ -91,26 +92,31 @@ class LoginCubit extends Cubit<LoginState> {
             result.fold(
               (error) {
                 emit(state.copyWith(status: LoginStatus.error, exception: error));
+                reset();
               },
               (response) async {
-                emit(state.copyWith(status: LoginStatus.completed, loginResponse: response));
-                await SharedManager.instance!.saveStringValue(CacheKeys.token.name, response.token);
-                await registerFcmToken();
+                await handleSuccessLogin(response: response);
               },
             );
           } else {
             emit(state.copyWith(status: LoginStatus.error, exception: error));
+            reset();
           }
         },
         (response) async {
-          emit(state.copyWith(status: LoginStatus.completed, loginResponse: response));
-          await SharedManager.instance!.saveStringValue(CacheKeys.token.name, response.token);
-          await registerFcmToken();
+          await handleSuccessLogin(response: response);
         },
       );
     } catch (e) {
-      emit(state.copyWith(
-          status: LoginStatus.error, exception: AppException(message: e.toString())));
+      emit(
+        state.copyWith(
+          status: LoginStatus.error,
+          exception: AppException(message: e.toString()),
+          email: "",
+          password: "",
+          loginResponse: null,
+        ),
+      );
     }
   }
 
@@ -157,7 +163,41 @@ class LoginCubit extends Cubit<LoginState> {
       (error) {
         emit(state.copyWith(status: LoginStatus.error, exception: error));
       },
-      (response) {},
+      (response) {
+        SharedManager.instance!.saveStringValue(
+          CacheKeys.fcmToken.name,
+          response.token,
+        );
+      },
     );
+  }
+
+  Future<void> sendNotification({required String title, required String body}) async {
+    final result = await _notificationSendUsecase.call(NotificationSendParams(
+      state.loginResponse!.userId,
+      title,
+      body,
+    ));
+
+    result.fold(
+      (error) {
+        emit(state.copyWith(status: LoginStatus.error, exception: error));
+      },
+      (response) {
+        emit(state.copyWith(status: LoginStatus.completed));
+      },
+    );
+  }
+
+  void reset() {
+    emit(LoginState.initial());
+  }
+
+  Future<void> handleSuccessLogin({required LoginResponseEntity response}) async {
+    emit(state.copyWith(status: LoginStatus.completed, loginResponse: response));
+    await SharedManager.instance!.saveStringValue(CacheKeys.token.name, response.token);
+    await registerFcmToken();
+    await sendNotification(title: "Congratulations", body: "You have successfully logged in");
+    GoManager.instance.replace(path: NavigationConstants.dashboard);
   }
 }

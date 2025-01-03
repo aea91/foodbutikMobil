@@ -1,6 +1,7 @@
 import 'package:auth/login/presentation/view/login_view.dart';
 import 'package:auth/register/presentation/view/register_view.dart';
 import 'package:auth/utils/navigation_constants.dart';
+import 'package:dashboard/presentation/view/dashboard_view.dart';
 import 'package:go_router/go_router.dart';
 
 List<GoRoute> authGoRouter = [
@@ -11,5 +12,9 @@ List<GoRoute> authGoRouter = [
   GoRoute(
     path: NavigationConstants.register,
     builder: (context, state) => const RegisterView(),
+  ),
+  GoRoute(
+    path: NavigationConstants.dashboard,
+    builder: (context, state) => const DashboardView(),
   ),
 ];
